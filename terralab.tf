@@ -149,7 +149,7 @@ resource "azurerm_virtual_machine" "vm1" {
     }
 
     os_profile {
-        computer_name  = "myvm"
+        computer_name  = "vm1"
         admin_username = "admloc"
         admin_password = "Azerty5*"
     }
