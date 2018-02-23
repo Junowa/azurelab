@@ -21,9 +21,8 @@ Start packer with -var-file=variables.json option :
     "ssh_pass": "mysecret"
 }
   
-Packer creates an VHD.  
-When packer creates a managed image, terraform fails to use it (investigation in progress).  
-
+Packer creates an VHD (not a managed image -investigation in progress).
+ 
 ## Terraform
 
 Create provider.tf file as follow:
@@ -35,5 +34,7 @@ provider "azurerm" {
     tenant_id       = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
 }
 
+Terraform fails at creating managed image form custom image or marketplace image.
+azurerm_virtual_machine.myterraformvm: compute.VirtualMachinesClient#CreateOrUpdate: Failure sending request: StatusCode=409 -- Original Error: failed request: autorest/azure: Service returned an error. Status=<nil> Code="PropertyChangeNotAllowed" Message="Changing property 'osDisk.name' is not allowed."
 
 

@@ -1,3 +1,6 @@
+# TODO
+# check resource dependencies
+#
 
 variable "resourcename" {
   default = "myResourceGroup"
@@ -15,7 +18,7 @@ resource "azurerm_resource_group" "myterraformgroup" {
 
 # Create virtual network
 resource "azurerm_virtual_network" "myterraformnetwork" {
-    name                = "myVnet"
+    name                = "myterraVnet"
     address_space       = ["10.0.0.0/16"]
     location            = "West Europe"
     resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
@@ -27,7 +30,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
 
 # Create subnet
 resource "azurerm_subnet" "myterraformsubnet" {
-    name                 = "mySubnet"
+    name                 = "myterrasubnet"
     resource_group_name  = "${azurerm_resource_group.myterraformgroup.name}"
     virtual_network_name = "${azurerm_virtual_network.myterraformnetwork.name}"
     address_prefix       = "10.0.1.0/24"
@@ -69,14 +72,14 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 }
 
 # Create network interface
-resource "azurerm_network_interface" "myterraformnic" {
-    name                      = "myNIC"
+resource "azurerm_network_interface" "vm1nic" {
+    name                      = "vm1nic"
     location                  = "West Europe"
     resource_group_name       = "${azurerm_resource_group.myterraformgroup.name}"
     network_security_group_id = "${azurerm_network_security_group.myterraformnsg.id}"
 
     ip_configuration {
-        name                          = "myNicConfiguration"
+        name                          = "vm1NicConfiguration"
         subnet_id                     = "${azurerm_subnet.myterraformsubnet.id}"
         private_ip_address_allocation = "dynamic"
         public_ip_address_id          = "${azurerm_public_ip.myterraformpublicip.id}"
@@ -87,6 +90,23 @@ resource "azurerm_network_interface" "myterraformnic" {
     }
 }
 
+# Create network interface
+resource "azurerm_network_interface" "vm2nic" {
+    name                      = "vm2nic"
+    location                  = "West Europe"
+    resource_group_name       = "${azurerm_resource_group.myterraformgroup.name}"
+    network_security_group_id = "${azurerm_network_security_group.myterraformnsg.id}"
+
+    ip_configuration {
+        name                          = "myNicConfiguration"
+        subnet_id                     = "${azurerm_subnet.myterraformsubnet.id}"
+        private_ip_address_allocation = "dynamic"
+    }
+
+    tags {
+        environment = "Terraform Demo"
+    }
+}
 resource "azurerm_storage_account" "myterraformstorageacc" {
   name                     = "myterraformaccount"
   resource_group_name      = "${azurerm_resource_group.myterraformgroup.name}"
@@ -104,31 +124,80 @@ resource "azurerm_storage_container" "myterraformstoragecontainer" {
   resource_group_name   = "${azurerm_resource_group.myterraformgroup.name}"
   storage_account_name  = "${azurerm_storage_account.myterraformstorageacc.name}"
   container_access_type = "private"
+  depends_on = ["azurerm_storage_account.myterraformstorageacc"]
 }
 
-# Create virtual machine
-resource "azurerm_virtual_machine" "myterraformvm" {
-    name                  = "myVM"
+# Create virtual machine from marketplace image to unmanaged disk
+resource "azurerm_virtual_machine" "vm1" {
+    name                  = "vm1"
     location              = "West Europe"
     resource_group_name   = "${azurerm_resource_group.myterraformgroup.name}"
-    network_interface_ids = ["${azurerm_network_interface.myterraformnic.id}"]
+    network_interface_ids = ["${azurerm_network_interface.vm1nic.id}"]
     vm_size               = "Basic_A2"
 
     storage_image_reference {
-        publisher	= "OpenLogic"
-    	offer		= "CentOS"
-    	sku		= "7.3"
+        publisher	= "Canonical"
+    	offer		= "UbuntuServer"
+    	sku		= "16.04-LTS"
     	version		= "latest"
     }
 
     storage_os_disk { 
-	name		= "pkrosb7bbp1qs2g.vhd"
-	vhd_uri		="${azurerm_storage_account.myterraformstorageacc.primary_blob_endpoint}${azurerm_storage_container.myterraformstoragecontainer.name}/pkrosb7bbp1qs2g.vhd"
+	name		= "vm1.vhd"
+	vhd_uri		="${azurerm_storage_account.myterraformstorageacc.primary_blob_endpoint}${azurerm_storage_container.myterraformstoragecontainer.name}/vm1.vhd"
         create_option   = "FromImage"
     }
 
     os_profile {
         computer_name  = "myvm"
+        admin_username = "admloc"
+        admin_password = "Azerty5*"
+    }
+
+    os_profile_linux_config {
+	disable_password_authentication = false
+    }
+
+    tags {
+        environment = "Terraform Demo"
+    }
+}
+
+#resource "azurerm_image" "mycentos" {
+#  name                = "myPackerImage"
+#  resource_group_name = "mypackerbuild"
+#  location                     = "West Europe"
+#}
+
+
+
+# Create virtual machine from packer custom image to unmanaged disk
+resource "azurerm_virtual_machine" "vm2" {
+    name                  = "vm2"
+    location              = "West Europe"
+    resource_group_name   = "${azurerm_resource_group.myterraformgroup.name}"
+    network_interface_ids = ["${azurerm_network_interface.vm2nic.id}"]
+    vm_size               = "Basic_A2"
+
+#    storage_image_reference {
+#	id = "${azurerm_image.mycentos.id}"
+#    }
+
+    storage_image_reference {
+        publisher	= "Canonical"
+    	offer		= "UbuntuServer"
+    	sku		= "16.04-LTS"
+    	version		= "latest"
+    }
+
+    storage_os_disk { 
+	name		= "vm2.vhd"
+	vhd_uri		="${azurerm_storage_account.myterraformstorageacc.primary_blob_endpoint}${azurerm_storage_container.myterraformstoragecontainer.name}/vm2.vhd"
+        create_option   = "FromImage"
+    }
+
+    os_profile {
+        computer_name  = "vm2"
         admin_username = "admloc"
         admin_password = "Azerty5*"
     }
