@@ -1,2 +1,6 @@
 packer-vars.json
 packer
+terraform
+provider.tf
+.terraform
+*.tfstate*
