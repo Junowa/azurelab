@@ -4,23 +4,17 @@
 
     "client_id": "{{user `client_id`}}",
     "client_secret": "{{user `client_secret`}}",
-    "resource_group_name": "{{user `resource_group`}}",
-    "storage_account": "{{user `storage_account`}}",
     "subscription_id": "{{user `subscription_id`}}",
     "tenant_id": "{{user `tenant_id`}}",
 
-    "capture_container_name": "images",
-    "capture_name_prefix": "packer",
-
-    "ssh_username": "{{user `ssh_user`}}",
-    "ssh_password": "{{user `ssh_pass`}}",
+    "managed_image_resource_group_name": "myTemplateResourceGroup",
+    "managed_image_name": "myCentosTemplate",
 
     "os_type": "Linux",
     "image_publisher": "OpenLogic",
     "image_offer": "CentOS",
     "image_sku": "7.3",
     "image_version": "latest",
-    "ssh_pty": "true",
 
     "location": "WestEurope",
     "vm_size": "Basic_A2"

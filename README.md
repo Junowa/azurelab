@@ -21,7 +21,13 @@ Start packer with -var-file=variables.json option :
     "ssh_pass": "mysecret"
 }
   
-Packer creates an VHD (not a managed image -investigation in progress).
+Packer creates an VHD (cf. old commits) or managed image.
+Packer create a temporary resource group, and captures generated image in the specified resource group.
+
+To view images :
+$ az image list
+
+
  
 ## Terraform
 
