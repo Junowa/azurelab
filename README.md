@@ -27,7 +27,6 @@ Packer create a temporary resource group, and captures generated image in the sp
 To view images :
 $ az image list
 
-
  
 ## Terraform
 
@@ -46,6 +45,9 @@ Notes:
 Terraform fails at creating managed image form custom image or marketplace image.
 azurerm_virtual_machine.myterraformvm: compute.VirtualMachinesClient#CreateOrUpdate: Failure sending request: StatusCode=409 -- Original Error: failed request: autorest/azure: Service returned an error. Status=<nil> Code="PropertyChangeNotAllowed" Message="Changing property 'osDisk.name' is not allowed."
 
-When destroying, terraform does not delete the os storage disk (vhd) in blob storage container.
+When using unmanaged image, during destroying, terraform does not delete the os storage disk (vhd) in blob storage container.
 Then terraforms fails when trying to create the resource again as disk already exists.
-This is the exepcted behaviour as the dish is unmanaged (not recommended in terraform doc).
+
+To use packer managed template image, use azurerm_image resource, and overwrite os_disk properties.
+
+
