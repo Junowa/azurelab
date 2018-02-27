@@ -12,5 +12,6 @@ before_install:
     -e ARM_CLIENT_SECRET \
     -e ARM_SUBSCRIPTION_ID \
     -e ARM_TENANT_ID \
-    -v $(pwd):/data \
+    -v $(pwd):/app/ \
+    -w /app/ \
     -t hashicorp/terraform:light apply -auto-approve
