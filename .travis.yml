@@ -6,7 +6,12 @@ services:
   - docker
 
 before_install:
-  - sudo docker run --rm -i -t hashicorp/terraform:light init
+  - |
+    sudo docker run -i \
+    -v $(pwd):/app/ \
+    -w /app/ \
+    -t hashicorp/terraform:light init
+
   - |
     sudo docker run -i \
     -e ARM_CLIENT_ID \
