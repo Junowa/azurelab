@@ -14,10 +14,10 @@ before_install:
 
   - |
     sudo docker run -i \
-    -e ARM_CLIENT_ID \
-    -e ARM_CLIENT_SECRET \
-    -e ARM_SUBSCRIPTION_ID \
-    -e ARM_TENANT_ID \
+    -e TF_VAR_ARM_CLIENT_ID \
+    -e TF_VAR_ARM_CLIENT_SECRET \
+    -e TF_VAR_ARM_SUBSCRIPTION_ID \
+    -e TF_VAR_ARM_TENANT_ID \
     -v $(pwd):/app/ \
     -w /app/ \
     -t hashicorp/terraform:light apply -auto-approve
