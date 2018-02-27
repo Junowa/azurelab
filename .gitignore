@@ -3,4 +3,4 @@ packer
 terraform
 .terraform
 *.tfstate*
-setenv.sh
+terra.env
