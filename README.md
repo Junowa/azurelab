@@ -32,14 +32,12 @@ $ az image list
  
 ## Terraform
 
-Create provider.tf file as follow:
+Create the following terraform env vars:
 `
-provider "azurerm" {  
-    subscription_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"  
-    client_id       = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"  
-    client_secret   = "mysecret"  
-    tenant_id       = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"  
-}  
+export TF_VAR_ARM_SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
+export TF_VAR_ARM_CLIENT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
+export TF_VAR_ARM_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxx"
+export TF_VAR_ARM_TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
 `
 
 __Notes:__
