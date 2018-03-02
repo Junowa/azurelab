@@ -4,3 +4,4 @@ terraform
 .terraform
 *.tfstate*
 terra.env
+beconf.tfvars

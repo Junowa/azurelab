@@ -40,6 +40,17 @@ export TF_VAR_ARM_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxx"
 export TF_VAR_ARM_TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
 `
 
+Azure blob storage manage terraform remote state.   
+To enable, create beconf.tfvars with the following contents:
+`
+storage_account_name = "xxxxxxxxxxxxxxxxxxxx"
+container_name       = "terralabstate"
+access_key           = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+key		     = "terraform.tfstate"
+`
+    
+
+
 __Notes:__
 
 Terraform fails at creating managed image form custom image or marketplace image.  
