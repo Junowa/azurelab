@@ -4,8 +4,8 @@
 * Create a managed image from packer  
 * Manage a simple infrastructure from terraform  
 
-<INTERNET>---public subnet---<BASTION>---private subnet---<APP1>
-
+    | INTERNET | --- public subnet --- | BASTION | --- private subnet --- | APP1 |    
+    
 
 ## Packer
 
