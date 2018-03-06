@@ -4,6 +4,9 @@
 * Create a managed image from packer  
 * Manage a simple infrastructure from terraform  
 
+<INTERNET>---public subnet---<BASTION>---private subnet---<APP1>
+
+
 ## Packer
 
 Before starting packer, execute azure-setup.sh (requirements setup) 
@@ -62,5 +65,14 @@ Otherwise, Terraform fails at creating managed image form custom image or market
 
 When using unmanaged image, during destroying, terraform does not delete the os storage disk (vhd) in blob storage container.  Then, Terraform fails when trying to create the resource again as disk already exists.  
 
+Same error as below if osDisk.name is not as follows : "osdisk"+blablabla.   
+Name must begin with osdisk.   
+
+### Terraform outputs
+
+To display bastion public ip address:   
+```
+$ terraform output bastion_public_ip
+```
 
 
